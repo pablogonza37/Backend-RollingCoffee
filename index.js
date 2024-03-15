@@ -4,6 +4,7 @@ import "dotenv/config";
 import morgan from "morgan";
 import {fileURLToPath} from 'url';
 import path from 'path';
+import tareasRouter from "./src/routes/tareas.routes.js";
 
 const app = express();
 app.set("port", process.env.PORT || 4000);
@@ -20,7 +21,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname,'/public')));
 
-app.get("/nuevo", (req, res) => {
-  console.log("alguien solicito algo");
-  res.send("respuesta desde el backend lista de tareas");
-});
+
+app.use('/api', tareasRouter);
+
