@@ -5,6 +5,7 @@ import morgan from "morgan";
 import {fileURLToPath} from 'url';
 import path from 'path';
 import tareasRouter from "./src/routes/tareas.routes.js";
+import './src/database/database.js'
 
 const app = express();
 app.set("port", process.env.PORT || 4000);
