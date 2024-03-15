@@ -1,0 +1,12 @@
+{
+  "name": "backendlistatareas",
+  "version": "1.0.0",
+  "description": "Backend del proyecto Lista de tareas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Pablo Gonzalez",
+  "license": "ISC"
+}
