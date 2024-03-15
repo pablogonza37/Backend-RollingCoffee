@@ -1,8 +1,16 @@
 import Tarea from "../database/model/tarea.js";
 
-export const listarTareas = (req, res) => {
-  console.log("desde listar tareas");
-  res.send("enviar lista de tareas...");
+export const listarTareas = async (req, res) => {
+    try{
+        const tareas = await Tarea.find();
+        res.status(200).json(tareas)
+    }catch (error){
+        console.log(error);
+        res.status(404).json({
+            mensaje: "No se pudo encontrar la lista de tareas",
+          });
+    }
+  
 };
 
 export const crearTarea = async (req, res) => {
