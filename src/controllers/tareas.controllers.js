@@ -39,16 +39,16 @@ export const crearTarea = async (req, res) => {
   }
 };
 
-export const editarTarea = async (req, res) => {
+export const borrarTarea = async (req, res) => {
   try {
     const buscarTarea = await Tarea.findById(req.params.id);
-    if(!buscarTarea){
-        return res.status(404).json({
-            mensaje: 'No se pudo encontrar la tarea, el id es incorrecto'
-        })
+    if (!buscarTarea) {
+      return res.status(404).json({
+        mensaje: "No se pudo eliminar la tarea, el id es incorrecto",
+      });
     }
-    await Tarea.findByIdAndUpdate(req.params.id, req.body);
-    res.status(200).json({ mensaje: 'La tarea fue modificada exitosamente'})
+    await Tarea.findByIdAndDelete(req.params.id);
+    res.status(200).json({ mensaje: "La tarea fue eliminada correctamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -56,21 +56,3 @@ export const editarTarea = async (req, res) => {
     });
   }
 };
-
-export const borrarTarea = async (req, res) => {
-    try {
-      const buscarTarea = await Tarea.findById(req.params.id);
-      if(!buscarTarea){
-          return res.status(404).json({
-              mensaje: 'No se pudo eliminar la tarea, el id es incorrecto'
-          })
-      }
-      await Tarea.findByIdAndDelete(req.params.id);
-      res.status(200).json({ mensaje: 'La tarea fue eliminada correctamente'})
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        mensaje: "ocurrio un error al intentar editar la tarea",
-      });
-    }
-  };
