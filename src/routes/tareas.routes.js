@@ -10,6 +10,6 @@ import {
 const router = Router();
 
 router.route("/tareas").get(listarTareas).post(crearTarea);
-router.route("/tarea/:id").get(obtenerTarea).delete(borrarTarea).put(editarTarea);
+router.route("/tareas/:id").get(obtenerTarea).delete(borrarTarea).put(editarTarea);
 
 export default router;
