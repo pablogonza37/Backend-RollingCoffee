@@ -7,7 +7,11 @@ const tareaSchema = new Schema({
         unique: true,
         minLength:3,
         maxLength:40
-    }
+    },
+    realizada:{
+    type: Boolean,
+    required: true,
+},
 })
 
 const Tarea = mongoose.model('tarea', tareaSchema);
