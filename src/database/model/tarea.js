@@ -1,6 +1,9 @@
 import mongoose, {Schema} from "mongoose";
 
 const tareaSchema = new Schema({
+    idUsuario: {
+        type: String
+      },
     tarea:{
         type: String,
         required: true,

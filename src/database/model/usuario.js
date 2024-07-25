@@ -34,8 +34,8 @@ const UsuarioSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  tareas: { type: String },
+  tareas: [],
 });
 
-const Usuario = model("usuario", UsuarioSchema);
+const Usuario = mongoose.model("usuario", UsuarioSchema);
 export default Usuario;

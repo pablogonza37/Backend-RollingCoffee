@@ -1,10 +1,11 @@
-import { Usuario } from "../database/model/usuario.js";
+import Usuario  from "../database/model/usuario.js";
+import Tarea from "../database/model/tarea.js"
 import bcrypt from "bcrypt";
 import generarJWT from "../helpers/generarJWT.js";
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, contrasenia } = req.body;
     const emailValidacion = await Usuario.findOne({ email });
     if (emailValidacion) {
       return res.status(400).json({
@@ -12,23 +13,25 @@ export const crearUsuario = async (req, res) => {
       });
     }
     const saltos = bcrypt.genSaltSync(10);
-    const passEncriptada = bcrypt.hashSync(password, saltos);
+    const passEncriptada = bcrypt.hashSync(contrasenia, saltos);
     const nuevoUsuario = new Usuario(req.body);
-    nuevoUsuario.password = passEncriptada;
+    nuevoUsuario.contrasenia = passEncriptada;
+    const tarea = new Tarea({idUsuario: nuevoUsuario._id})
+    nuevoUsuario.idTarea = tarea._id
     await nuevoUsuario.save();
 
-    await enviarCorreoRegistro(email);
-
     const token = await generarJWT(nuevoUsuario._id, nuevoUsuario.email);
-
+    
     res.status(201).json({
       mensaje: "Usuario creado correctamente.",
       email: nuevoUsuario.email,
       nombreUsuario: nuevoUsuario.nombreUsuario,
       rol: nuevoUsuario.rol,
-      suspendido: nuevoUsuario.suspendido,
+      habilitado: nuevoUsuario.habilitado,
       token: token,
+      idTarea: tarea._id,
     });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -116,30 +119,31 @@ export const levantarSuspensionUsuario = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, contrasenia } = req.body;
     const usuarioBuscado = await Usuario.findOne({ email });
     if (!usuarioBuscado) {
       return res.status(400).json({
-        mensaje: "Correo o password incorrecto - correo",
+        mensaje: "Correo o contrasenia incorrecto - correo",
       });
     }
 
-    const passwordValido = bcrypt.compareSync(
-      password,
-      usuarioBuscado.password
+    const contraseniaValido = bcrypt.compareSync(
+      contrasenia,
+      usuarioBuscado.contrasenia
     );
-    if (!passwordValido) {
+    if (!contraseniaValido) {
       return res.status(400).json({
-        mensaje: "Correo o password incorrecto - password",
+        mensaje: "Correo o contraseña incorrecto - contraseña",
       });
     }
     const token = await generarJWT(usuarioBuscado._id, usuarioBuscado.email);
     res.status(200).json({
-      mensaje: "Inicio de sesión exitoso",
+      mensaje: "Inicio de sesión correctamente",
+      nombreUsuario: usuarioBuscado.nombreUsuario,
       email: usuarioBuscado.email,
       token: token,
       rol: usuarioBuscado.rol,
-      suspendido: usuarioBuscado.suspendido,
+      habilitado: usuarioBuscado.habilitado,
     });
   } catch (error) {
     console.error(error);

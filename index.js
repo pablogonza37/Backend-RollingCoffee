@@ -5,6 +5,7 @@ import morgan from "morgan";
 import { fileURLToPath } from "url";
 import path from "path";
 import tareasRouter from "./src/routes/tareas.routes.js";
+import usuariosRouter from "./src/routes/usuarios.routes.js";
 import "./src/database/database.js";
 
 const app = express();
@@ -21,3 +22,4 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "/public")));
 
 app.use("/api", tareasRouter);
+app.use("/api", usuariosRouter);

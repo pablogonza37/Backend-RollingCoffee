@@ -1,4 +1,5 @@
 import Tarea from "../database/model/tarea.js";
+import Usuario from "../database/model/usuario.js";
 
 export const listarTareas = async (req, res) => {
   try {
@@ -26,15 +27,37 @@ export const obtenerTarea = async (req, res) => {
 
 export const crearTarea = async (req, res) => {
   try {
-    const tareaNueva = new Tarea(req.body);
-    await tareaNueva.save();
+    const { idUsuario } = req.params; // Obtiene el id del usuario de los parámetros de la URL
+    const { tarea, realizada } = req.body; // Obtiene los datos de la tarea del cuerpo de la solicitud
+
+    // Busca el usuario por su id
+    const usuario = await Usuario.findById(idUsuario);
+    if (!usuario) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+
+    // Crea la nueva tarea
+    const nuevaTarea = new Tarea({
+      tarea,
+      realizada,
+      // Otros campos de la tarea según tu modelo de Tarea
+    });
+
+    await nuevaTarea.save();
+
+    // Asocia la tarea al usuario
+    usuario.tareas.push(nuevaTarea); // Asume que `tareas` es un array de referencias a Tarea en el modelo de Usuario
+    await usuario.save();
+
     res.status(201).json({
-      mensaje: "La tarea fue creada correctamente",
+      mensaje: "La tarea fue creada y asignada correctamente al usuario",
+      tarea: nuevaTarea // Opcional: devolver información sobre la tarea creada
     });
   } catch (error) {
-    console.log(error);
+    console.error('Error al crear y asignar la tarea:', error);
     res.status(400).json({
       mensaje: "No se pudo procesar la solicitud de crear la tarea",
+      error: error.message // Devuelve el mensaje de error al cliente para depuración
     });
   }
 };

@@ -10,13 +10,15 @@ import {
 } from "../controllers/usuarios.controllers.js";
 import validacionesUsuario from "../helpers/validacionUsuario.js";
 import validarJWT from "../helpers/verificarJWT.js";
+import { crearTarea } from "../controllers/tareas.controllers.js";
 
 const router = Router();
 
 router.route("/usuarios").post([validacionesUsuario], crearUsuario).get(listarUsuarios);
-router.route("/usuarios/:id").get(obtenerUsuario).delete(validarJWT, borrarUsuario);
-router.route('/suspender/:id').put(suspenderUsuario);
-router.route('/levantar-suspension/:id').put(levantarSuspensionUsuario);
+router.route("/usuarios/:idUsuario").get(obtenerUsuario).delete(borrarUsuario);
+router.route('/suspender/:idUsuario').put(suspenderUsuario);
+router.route('/levantar-suspension/:idUsuario').put(levantarSuspensionUsuario);
 router.route("/login").post(login);
+router.route("/usuarios/:idUsuario").post(crearTarea)
 
 export default router;
