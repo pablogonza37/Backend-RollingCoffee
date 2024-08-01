@@ -36,7 +36,7 @@ export const listarTareas = async (req, res) => {
 
 export const obtenerTarea = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.params.idTarea;
     const idUsuario = req.idUsuario;
     const tareaBuscada = await Tarea.findOne({ _id: id, idUsuario: idUsuario });
 
@@ -95,7 +95,7 @@ export const crearTarea = async (req, res) => {
 
 export const borrarTarea = async (req, res) => {
   try {
-    const idTarea = req.params.id;
+    const idTarea = req.params.idTarea;
     const idUsuario = req.idUsuario;
 
     const usuario = await Usuario.findById(idUsuario);
@@ -153,7 +153,7 @@ export const editarTarea = async (req, res) => {
   }
 
   try {
-    const idTarea = req.params.id;
+    const idTarea = req.params.idTarea;
     const idUsuario = req.idUsuario;
     const { tarea, realizada } = req.body;
 

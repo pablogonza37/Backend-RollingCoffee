@@ -25,6 +25,10 @@ const tareaSchema = new Schema({
     type: String,
     default: Date.now,
   },
+  fechaLimite: {
+    type: String,
+    default: '',
+  }
 });
 
 const Tarea = mongoose.model("tarea", tareaSchema);

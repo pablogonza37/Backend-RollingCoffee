@@ -118,13 +118,23 @@ export const levantarSuspensionUsuario = async (req, res) => {
   }
 };
 
+
 export const login = async (req, res) => {
   try {
-    const { email, contrasenia } = req.body;
-    const usuarioBuscado = await Usuario.findOne({ email });
+    const { email, nombreUsuario, contrasenia } = req.body;
+
+    if (!email && !nombreUsuario) {
+      return res.status(400).json({
+        mensaje: "Se requiere email o nombre de usuario.",
+      });
+    }
+
+    const query = email ? { email } : { nombreUsuario };
+    const usuarioBuscado = await Usuario.findOne(query);
+
     if (!usuarioBuscado) {
       return res.status(400).json({
-        mensaje: "Correo o contrasenia incorrecto - correo",
+        mensaje: "Correo o nombre de usuario o contraseña incorrecto.",
       });
     }
 
@@ -134,10 +144,12 @@ export const login = async (req, res) => {
     );
     if (!contraseniaValido) {
       return res.status(400).json({
-        mensaje: "Correo o contraseña incorrecto - contraseña",
+        mensaje: "Correo o nombre de usuario o contraseña incorrecto.",
       });
     }
+
     const token = await generarJWT(usuarioBuscado._id, usuarioBuscado.email, usuarioBuscado.rol, usuarioBuscado.habilitado);
+
     res.status(200).json({
       mensaje: "Inicio de sesión correctamente",
       nombreUsuario: usuarioBuscado.nombreUsuario,
@@ -153,6 +165,7 @@ export const login = async (req, res) => {
     });
   }
 };
+
 
 
 export const agregarImagenPerfil = async(req, res) => {
