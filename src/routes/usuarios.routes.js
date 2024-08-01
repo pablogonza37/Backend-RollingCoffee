@@ -15,14 +15,14 @@ import upload from '../middlewares/multer.js'
 
 const router = Router();
 
-router.post('/usuarios', auth(['admin']), [validacionesUsuario], crearUsuario);
+router.post('/usuarios', [validacionesUsuario], crearUsuario);
 router.get('/usuarios', auth(['admin']), listarUsuarios);
 router.get('/usuarios/:idUsuario', auth(['admin']), obtenerUsuario);
 router.delete('/usuarios/:idUsuario', auth(['admin']), borrarUsuario);
 router.put('/suspender/:idUsuario', auth(['admin']), suspenderUsuario);
 router.put('/levantar-suspension/:idUsuario', auth(['admin']), levantarSuspensionUsuario);
 router.post('/login', login);
-router.post('/agregarImagen', auth(['usuario']), upload.single('imagen'), agregarImagenPerfil)
+router.post('/agregarImagen', auth(['usuario, admin']), upload.single('imagen'), agregarImagenPerfil)
 
 
 export default router;

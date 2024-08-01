@@ -3,6 +3,7 @@ import Tarea from "../database/model/tarea.js"
 import bcrypt from "bcrypt";
 import generarJWT from "../helpers/generarJWT.js";
 import cloudinary from '../helpers/cloudinary.js';
+import registroUsuario from '../helpers/mensaje.js'
 
 export const crearUsuario = async (req, res) => {
   try {
@@ -32,6 +33,8 @@ export const crearUsuario = async (req, res) => {
       token: token,
       idUsuario: nuevoUsuario._id
     });
+
+    registroUsuario(nuevoUsuario.nombreUsuario, nuevoUsuario.email)
     
   } catch (error) {
     console.error(error);

@@ -1,13 +1,7 @@
 import Tarea from "../database/model/tarea.js";
 import Usuario from "../database/model/usuario.js";
-
-import moment from "moment-timezone";
-
-const convertirAHoraArgentina = (fechaUTC) => {
-  return moment(fechaUTC)
-    .tz("America/Argentina/Buenos_Aires")
-    .format("YYYY-MM-DD HH:mm:ss");
-};
+import obtenerFechaHora from "../helpers/obtenerFecha.js"
+import convertirAHoraArgentina from "../helpers/moment.js"
 
 export const listarTareas = async (req, res) => {
   try {
@@ -67,6 +61,12 @@ export const crearTarea = async (req, res) => {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
 
+    const tareaExistente = usuario.tareas.find(t => t.tarea === tarea);
+
+    if (tareaExistente) {
+      return res.status(400).json({ mensaje: "La tarea ya existe para este usuario" });
+    }
+
     const nuevaTarea = new Tarea({
       tarea,
       realizada,
@@ -92,6 +92,7 @@ export const crearTarea = async (req, res) => {
     });
   }
 };
+
 
 export const borrarTarea = async (req, res) => {
   try {
@@ -139,18 +140,7 @@ export const borrarTarea = async (req, res) => {
 };
 
 export const editarTarea = async (req, res) => {
-  function obtenerFechaHora() {
-    const ahora = new Date();
-
-    const año = ahora.getFullYear();
-    const mes = String(ahora.getMonth() + 1).padStart(2, "0");
-    const dia = String(ahora.getDate()).padStart(2, "0");
-    const hora = String(ahora.getHours()).padStart(2, "0");
-    const minuto = String(ahora.getMinutes()).padStart(2, "0");
-    const segundo = String(ahora.getSeconds()).padStart(2, "0");
-
-    return `${año}-${mes}-${dia} ${hora}:${minuto}:${segundo}`;
-  }
+  
 
   try {
     const idTarea = req.params.idTarea;

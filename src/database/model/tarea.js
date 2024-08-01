@@ -8,9 +8,8 @@ const tareaSchema = new Schema({
   tarea: {
     type: String,
     required: true,
-    unique: true,
     minLength: 3,
-    maxLength: 40,
+    maxLength: 100,
   },
   realizada: {
     type: Boolean,
