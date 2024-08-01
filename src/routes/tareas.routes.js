@@ -14,7 +14,7 @@ const router = Router();
 router.post('/tareas', auth(['usuario', 'admin']), validacionesTarea, crearTarea);
 router.get('/tareas', auth(['usuario', 'admin']), listarTareas);
 router.get('/tareas/:id', auth(['usuario', 'admin']), obtenerTarea);
-router.delete('/tareas/:id', auth(['admin']), borrarTarea);
+router.delete('/tareas/:id', auth(['usuario', 'admin']), borrarTarea);
 router.put('/tareas/:id', auth(['usuario', 'admin']), editarTarea);
 
 
