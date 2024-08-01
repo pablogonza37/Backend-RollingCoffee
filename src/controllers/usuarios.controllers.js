@@ -20,7 +20,7 @@ export const crearUsuario = async (req, res) => {
     nuevoUsuario.idTarea = tarea._id
     await nuevoUsuario.save();
 
-    const token = await generarJWT(nuevoUsuario._id, nuevoUsuario.email);
+    const token = await generarJWT(nuevoUsuario._id, nuevoUsuario.email, nuevoUsuario.rol, nuevoUsuario.habilitado);
     
     res.status(201).json({
       mensaje: "Usuario creado correctamente.",
@@ -29,7 +29,7 @@ export const crearUsuario = async (req, res) => {
       rol: nuevoUsuario.rol,
       habilitado: nuevoUsuario.habilitado,
       token: token,
-      idTarea: tarea._id,
+      idUsuario: nuevoUsuario._id
     });
     
   } catch (error) {
@@ -55,7 +55,7 @@ export const listarUsuarios = async (req, res) => {
 
 export const obtenerUsuario = async (req, res) => {
   try {
-    const usuarioBuscado = await Usuario.findById(req.params.id);
+    const usuarioBuscado = await Usuario.findById(req.params.idUsuario);
     res.status(200).json(usuarioBuscado);
   } catch (error) {
     console.log(error);
@@ -85,7 +85,7 @@ export const borrarUsuario = async (req, res) => {
 
 export const suspenderUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findById(req.params.idUsuario);
     if (!usuario) {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
@@ -100,7 +100,7 @@ export const suspenderUsuario = async (req, res) => {
 
 export const levantarSuspensionUsuario = async (req, res) => {
   try {
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findById(req.params.idUsuario);
     if (!usuario) {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
@@ -136,7 +136,7 @@ export const login = async (req, res) => {
         mensaje: "Correo o contraseña incorrecto - contraseña",
       });
     }
-    const token = await generarJWT(usuarioBuscado._id, usuarioBuscado.email);
+    const token = await generarJWT(usuarioBuscado._id, usuarioBuscado.email, usuarioBuscado.rol, usuarioBuscado.habilitado);
     res.status(200).json({
       mensaje: "Inicio de sesión correctamente",
       nombreUsuario: usuarioBuscado.nombreUsuario,

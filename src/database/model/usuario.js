@@ -37,5 +37,10 @@ const UsuarioSchema = new Schema({
   tareas: [],
 });
 
+UsuarioSchema.methods.toJSON = function(){
+  const { contrasenia, __v, tareas, ...usuario } = this.toObject()
+  return usuario 
+}
+
 const Usuario = mongoose.model("usuario", UsuarioSchema);
 export default Usuario;

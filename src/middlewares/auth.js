@@ -1,21 +1,30 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-module.exports = () => (req, res) => {
+const auth = (roles = []) => (req, res, next) => {
+  const token = req.header('Authorization');
+
+  if (!token) {
+    return res.status(401).json({ msg: 'Token requerido' });
+  }
+
   try {
-    const token = req.header("auth");
-    if (!token) {
-      return res.status(400).json({ msg: "Token incorrecto" });
-    }
-
     const verify = jwt.verify(token, process.env.SECRET_JWT);
+    const rolUsuario = verify.rol;
 
-    if (rol === verify.rol) {
-      req.idUsuario = verify._id
+    if (roles.length === 0 || roles.includes(rolUsuario)) {
+      req.idUsuario = verify.uid;
       return next();
     } else {
-      return res.status(401).json({ msg: "No tienes acceso" });
+      return res.status(403).json({ msg: 'Acceso denegado' });
     }
+
   } catch (error) {
-    console.log(error);
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ msg: 'Token inválido' });
+    }
+    console.error(error);
+    return res.status(500).json({ msg: 'Error interno del servidor' });
   }
 };
+
+export default auth;

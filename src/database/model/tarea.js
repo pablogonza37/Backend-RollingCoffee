@@ -13,8 +13,21 @@ const tareaSchema = new Schema({
     },
     realizada:{
     type: Boolean,
-    required: true,
+    default: false,
+    required: true
+    
 },
+fechaCreacion: {
+    type: Date,
+    default: Date.now
+  },
+  fechaActualizacion: {
+    type: Date,
+    default: Date.now
+  },
+  
+    
+  
 })
 
 const Tarea = mongoose.model('tarea', tareaSchema);
