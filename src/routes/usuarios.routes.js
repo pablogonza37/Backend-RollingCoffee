@@ -6,10 +6,12 @@ import {
   obtenerUsuario,
   borrarUsuario,
   suspenderUsuario,
-  levantarSuspensionUsuario
+  levantarSuspensionUsuario,
+  agregarImagenPerfil
 } from "../controllers/usuarios.controllers.js";
 import validacionesUsuario from "../helpers/validacionUsuario.js";
 import auth from '../middlewares/auth.js'
+import upload from '../middlewares/multer.js'
 
 const router = Router();
 
@@ -20,6 +22,7 @@ router.delete('/usuarios/:idUsuario', auth(['admin']), borrarUsuario);
 router.put('/suspender/:idUsuario', auth(['admin']), suspenderUsuario);
 router.put('/levantar-suspension/:idUsuario', auth(['admin']), levantarSuspensionUsuario);
 router.post('/login', login);
+router.post('/agregarImagen', auth(['usuario']), upload.single('imagen'), agregarImagenPerfil)
 
 
 export default router;

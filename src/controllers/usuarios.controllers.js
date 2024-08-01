@@ -2,6 +2,7 @@ import Usuario  from "../database/model/usuario.js";
 import Tarea from "../database/model/tarea.js"
 import bcrypt from "bcrypt";
 import generarJWT from "../helpers/generarJWT.js";
+import cloudinary from '../helpers/cloudinary.js';
 
 export const crearUsuario = async (req, res) => {
   try {
@@ -152,3 +153,23 @@ export const login = async (req, res) => {
     });
   }
 };
+
+
+export const agregarImagenPerfil = async(req, res) => {
+  try {
+    
+      const usuario = await Usuario.findOne({_id: req.idUsuario})
+      const resultado = await cloudinary.uploader.upload(req.file.path)
+    
+      usuario.imagenPerfil = resultado.secure_url
+      const result = await usuario.save()
+
+
+   
+      return res.status(200).json({msg:'Se agrego la imagen correctamente'})
+    
+    
+  } catch (error) {
+    console.log(error)
+  }
+}
