@@ -37,6 +37,16 @@ const UsuarioSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  
+  genero: {
+    type: String,
+    required: true,
+  },
+
+  fechaNacimiento: {
+    type: String,
+    required: true,
+  },
   tareas: [],
 });
 

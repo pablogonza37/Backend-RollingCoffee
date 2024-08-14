@@ -69,23 +69,7 @@ export const obtenerUsuario = async (req, res) => {
   }
 };
 
-export const borrarUsuario = async (req, res) => {
-  try {
-    const usuarioBuscado = await Usuario.findById(req.params.id);
-    if (!usuarioBuscado) {
-      return res.status(404).json({
-        mensaje: "No se pudo eliminar el usuario, el id es incorrecto",
-      });
-    }
-    await Usuario.findByIdAndDelete(req.params.id);
-    res.status(200).json({ mensaje: "El usuario fue eliminado correctamente" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      mensaje: "ocurrio un error al intentar eliminar el usuario",
-    });
-  }
-};
+
 
 export const suspenderUsuario = async (req, res) => {
   try {
@@ -160,6 +144,10 @@ export const login = async (req, res) => {
       token: token,
       rol: usuarioBuscado.rol,
       habilitado: usuarioBuscado.habilitado,
+      imagenPerfil: usuarioBuscado.imagenPerfil,
+      id: usuarioBuscado._id,
+      genero: usuarioBuscado.genero,
+      fechaNacimiento: usuarioBuscado.fechaNacimiento,
     });
   } catch (error) {
     console.error(error);
@@ -181,11 +169,52 @@ export const agregarImagenPerfil = async(req, res) => {
       const result = await usuario.save()
 
 
-   
-      return res.status(200).json({msg:'Se agrego la imagen correctamente'})
+  
+      return res.status(200).json({
+        msg: 'Se agregó la imagen correctamente',
+        result,
+      });
     
     
   } catch (error) {
     console.log(error)
   }
 }
+
+export const borrarUsuario = async (req, res) => {
+  try {
+    const usuarioBuscado = await Usuario.findById(req.params.idUsuario);
+    if (!usuarioBuscado) {
+      return res.status(404).json({
+        mensaje: "No se pudo eliminar el usuario, el id es incorrecto",
+      });
+    }
+    await Usuario.findByIdAndDelete(req.params.idUsuario);
+    res.status(200).json({ mensaje: "El usuario fue eliminado correctamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      mensaje: "ocurrio un error al intentar eliminar el usuario",
+    });
+  }
+};
+
+export const editarUsuario = async (req, res) => {
+  try {
+    const buscarUsuario = await Usuario.findById(req.params.idUsuario);
+    if (!buscarUsuario) {
+      return res
+        .status(404)
+        .json({ mensaje: "No se pudo editar el usuario, el id es incorrecto" });
+    }
+    await Usuario.findByIdAndUpdate(req.params.idUsuario, req.body);
+    res
+      .status(200)
+      .json({ mensaje: "El usuario fue modificado correctamente" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ mensaje: "Ocurrio un error al intentar editar un usuario" });
+  }
+};

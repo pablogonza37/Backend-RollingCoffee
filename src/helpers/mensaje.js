@@ -3,7 +3,7 @@ import transporter from './nodemailer.js'
 const registroUsuario = async(nombre, emailUsuario) => {
   
   const info = await transporter.sendMail({
-    from: `pab.pg92@gmail.com`,
+    from: `admin@tareaFacil.com`,
     to: `${emailUsuario}`, 
     subject: "Bienvenido ✔", 
     html: `

@@ -17,16 +17,7 @@ const validacionesUsuario = [
   check("contrasenia")
     .notEmpty()
     .withMessage("El password es un dato obligatorio"),
-  check("rol")
-    .notEmpty()
-    .withMessage("El rol es un dato obligatorio")
-    .isIn(["usuario","admin"])
-    .withMessage(
-      "El rol debe ser una de las siguientes opciones: 'usuario','admin' "
-    ),
-    check("habilitado")
-    .notEmpty()
-    .withMessage("suspension es un dato obligatorio"),
+  check("rol"),
     check("tarea"),
     
   (req, res, next) => {
