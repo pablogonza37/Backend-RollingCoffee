@@ -9,7 +9,7 @@ const UsuarioSchema = new Schema({
   },
   imagenPerfil: {
     type: String,
-    default: "",
+    default: "https://res.cloudinary.com/dpgb6ec2s/image/upload/v1723685199/images_c9maxo.png",
   },
   email: {
     type: String,
